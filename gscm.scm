@@ -17,8 +17,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N     #\S  #\'))
-(define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr 'quote))
+(define keys (list #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N     #\S  #\'))
+(define vals (list '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr 'quote))
 
 ; Add variable char => symbol to keys
 (define keys (append keys (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)))
@@ -73,10 +73,18 @@
       sofar
     )
   )
+  (define (parse-str buf)
+    (define cur (buf))
+    (if (or (null? cur) (eq? cur #\"))
+      ""
+      (string-append (make-string 1 cur) (parse-str buf))
+    )
+  )
   (cond
     ((contains? start numerals) (parse-int start 0 buf))
     ((eq? start #\\) (buf))
     ((eq? start #\') (cons 'quote (list (parse buf))))
+    ((eq? start #\") (parse-str buf))
     (else start)
   )
 )
