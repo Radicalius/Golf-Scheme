@@ -44,11 +44,26 @@
   (lookup-helper keys vals)
 )
 
+; Returns an iterator for a string
+(define (buffer str)
+  (define k -1)
+  (lambda ()
+    (if (= k (- (string-length str) 1))
+      '()
+      (begin
+        (set! k (+ k 1))
+        (string-ref str k)
+      )
+    )
+  )
+)
+
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace str)
   (define (replace-helper k)
     (cond
-      ((= k (string-length str)) '())
+      ((or (= k (string-length str)) (eq? (string-ref str k) #\) )) '())
+      ; ((eq? (string-ref str k) #\)) (cons (replace helper (+ k 1))))
       ((contains? (string-ref str k)) (cons (lookup (string-ref str k)) (replace-helper (+ k 1))))
       (else (cons (string-ref str k) (replace-helper (+ k 1))))
     )
