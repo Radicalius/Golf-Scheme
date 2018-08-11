@@ -17,7 +17,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list '&   '|  '!   'A      'B     'C   'D       'E       'F    'I  'J      'L      'N      'S))
+(define keys (list #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N     #\S))
 (define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr))
 
 ; Determines if a character needs to be replaced
@@ -42,4 +42,16 @@
     )
   )
   (lookup-helper keys vals)
+)
+
+; Replaces all occurrences of items in keys with their associated values
+(define (replace str)
+  (define (replace-helper k)
+    (cond
+      ((= k (string-length str)) '())
+      ((contains? (string-ref str k)) (cons (lookup (string-ref str k)) (replace-helper (+ k 1))))
+      (else (cons (string-ref str k) (replace-helper (+ k 1))))
+    )
+  )
+  (replace-helper 0)
 )
