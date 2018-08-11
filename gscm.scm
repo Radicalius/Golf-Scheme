@@ -25,7 +25,7 @@
 (define vals (append vals (list 'a  'b  'c  'd  'e  'f  'g  'h  'i  'j  'k  'l  'm  'n  'o  'p  'q  'r  's  't  'u  'v  'w  'x  'y  'z)))
 
 ; Determines if a character needs to be replaced
-(define (contains? key)
+(define (contains? key keys)
   (define (contains-helper k)
     (cond
       ((null? k) #f)
@@ -37,7 +37,7 @@
 )
 
 ; Finds the replacement value associated with a given key
-(define (lookup key)
+(define (lookup key keys vals)
   (define (lookup-helper k v)
     (cond
       ((null? k) nil)
@@ -62,6 +62,25 @@
   )
 )
 
+(define numerals (list #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
+(define numbers  (list 0   1   2   3   4   5   6   7   8   9))
+
+; parses numbers, integers, strings, and quotes
+(define (parse start buf)
+  (define (parse-int start sofar buf)
+    (if (contains? start numerals)
+      (parse-int (buf) (+ (* 10 sofar) (lookup start numerals numbers)) buf)
+      sofar
+    )
+  )
+  (cond
+    ((contains? start numerals) (parse-int start 0 buf))
+    ((eq? start #\\) (buf))
+    ((eq? start #\') (cons 'quote (list (parse buf))))
+    (else start)
+  )
+)
+
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace buf)
   (define (replace-helper k)
@@ -69,8 +88,8 @@
     (cond
       ((or (null? cur) (eq? cur #\))) '())
       ((eq? cur #\( ) (cons (replace-helper buf) (replace-helper buf)))
-      ((contains? cur) (cons (lookup cur) (replace-helper buf)))
-      (else (cons cur (replace-helper buf)))
+      ((contains? cur keys) (cons (lookup cur keys vals) (replace-helper buf)))
+      (else (cons (parse cur buf) (replace-helper buf)))
     )
   )
   (replace-helper 0)
