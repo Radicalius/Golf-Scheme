@@ -17,5 +17,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list '&   '|  '!   'A      'B     'C   'D       'E       'F    'I  'J      'L      'S))
-(define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'cdr))
+(define keys (list '&   '|  '!   'A      'B     'C   'D       'E       'F    'I  'J      'L      'N      'S))
+(define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr))
+
+(define (lookup key)
+  (define (lookup-helper k v)
+    (cond
+      ((null? k) nil)
+      ((eq? (car k) key) (car v))
+      (else (lookup-helper (cdr k) (cdr v)))
+    )
+  )
+  (lookup-helper keys vals)
+)
