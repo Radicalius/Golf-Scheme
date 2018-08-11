@@ -1,0 +1,14 @@
+; parse the command line arguments
+(if (< (len *argv*) 4)
+  (display "Invalid Arguments\n")
+)
+
+(define args (cdr (cdr (cdr *argv*))))
+(if (eq? (car args) "FILE")
+  '()
+  (define script (car args))
+)
+
+; transpile and run the script
+(display (replace (buffer script)))
+(eval (replace (buffer script)))

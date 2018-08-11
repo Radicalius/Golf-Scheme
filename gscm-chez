@@ -110,3 +110,12 @@
     (+ 1 (len (cdr l)))
   )
 )
+; parse the command line arguments
+(if (< (len (command-line)) 2)
+  (display "Invalid Arguments\n")
+)
+
+(define script (car (cdr (command-line))))
+
+; transpile and run the script
+(eval (replace (buffer script)))
