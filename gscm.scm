@@ -20,6 +20,19 @@
 (define keys (list '&   '|  '!   'A      'B     'C   'D       'E       'F    'I  'J      'L      'N      'S))
 (define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr))
 
+; Determines if a character needs to be replaced
+(define (contains? key)
+  (define (contains-helper k)
+    (cond
+      ((null? k) #f)
+      ((eq? (car k) key) #t)
+      (else (contains-helper (cdr k)))
+    )
+  )
+  (contains-helper keys)
+)
+
+; Finds the replacement value associated with a given key
 (define (lookup key)
   (define (lookup-helper k v)
     (cond
