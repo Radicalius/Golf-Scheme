@@ -17,8 +17,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N     #\S))
-(define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr))
+(define keys (list #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N     #\S  #\'))
+(define vals (list 'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr 'quote))
+
+; Add variable char => symbol to keys
+(define keys (append keys (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)))
+(define vals (append vals (list 'a  'b  'c  'd  'e  'f  'g  'h  'i  'j  'k  'l  'm  'n  'o  'p  'q  'r  's  't  'u  'v  'w  'x  'y  'z)))
 
 ; Determines if a character needs to be replaced
 (define (contains? key)
