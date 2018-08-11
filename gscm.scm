@@ -17,8 +17,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\= #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N   #\O      #\S  #\'))
-(define vals (list '= ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'display 'cdr 'quote))
+(define keys (list #\#       #\=      #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N    #\M   #\O        #\P      #\S  #\'))
+(define vals (list 'number?  'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'pair?   'cdr 'quote))
 
 ; Add variable char => symbol to keys
 (define keys (append keys (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)))
