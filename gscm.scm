@@ -59,13 +59,14 @@
 )
 
 ; Replaces all occurrences of items in keys with their associated values
-(define (replace str)
+(define (replace buf)
   (define (replace-helper k)
+    (define cur (buf))
     (cond
-      ((or (= k (string-length str)) (eq? (string-ref str k) #\) )) '())
-      ; ((eq? (string-ref str k) #\)) (cons (replace helper (+ k 1))))
-      ((contains? (string-ref str k)) (cons (lookup (string-ref str k)) (replace-helper (+ k 1))))
-      (else (cons (string-ref str k) (replace-helper (+ k 1))))
+      ((or (null? cur) (eq? cur #\))) '())
+      ((eq? cur #\( ) (cons (replace-helper buf) (replace-helper buf)))
+      ((contains? cur) (cons (lookup cur) (replace-helper buf)))
+      (else (cons cur (replace-helper buf)))
     )
   )
   (replace-helper 0)
