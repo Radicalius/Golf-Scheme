@@ -9,16 +9,16 @@
 ; Author: Zachary Cotton
 ; Contact: mr.zacharycotton@gmail.com
 ;
-; Usage: scheme gscm.scm [golf scheme program source] # runs from argument text
-;        scheme gscm.scm -f [golf scheme script file] # runs from file
+; Usage: scm -f gscm.scm [golf scheme program source] # runs from argument text
+;        scm -f gscm.scm FILE [golf scheme script file] # runs from file
 ;
 ; Golf Scheme Language Specification:
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N     #\S  #\'))
-(define vals (list '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null?  'cdr 'quote))
+(define keys (list #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N   #\O      #\S  #\'))
+(define vals (list '() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'display 'cdr 'quote))
 
 ; Add variable char => symbol to keys
 (define keys (append keys (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)))
@@ -83,7 +83,7 @@
   (cond
     ((contains? start numerals) (parse-int start 0 buf))
     ((eq? start #\\) (buf))
-    ((eq? start #\') (cons 'quote (list (parse buf))))
+    ((eq? start #\') (list (list 'quote (list (parse buf)))))
     ((eq? start #\") (parse-str buf))
     (else start)
   )
@@ -102,3 +102,26 @@
   )
   (replace-helper 0)
 )
+
+; computes the length of a list
+(define (len l)
+  (if (null? l)
+    0
+    (+ 1 (len (cdr l)))
+  )
+)
+
+; parse the command line arguments
+(if (< (len *argv*) 4)
+  (display "Invalid Arguments\n")
+)
+
+(define args (cdr (cdr (cdr *argv*))))
+(if (eq? (car args) "FILE")
+  '()
+  (define script (car args))
+)
+
+; transpile and run the script
+(display (replace (buffer script)))
+(eval (replace (buffer script)))
