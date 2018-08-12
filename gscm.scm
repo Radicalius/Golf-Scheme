@@ -92,6 +92,21 @@
   )
 )
 
+; a list of all the golf-scheme keywords that may need leading parenthesis
+(define need-l-p (list #\# #\= #\+ #\- #\* #\&  #\| #\!  #\A #\B #\C #\D #\E #\F #\I #\J #\L #\N #\M #\O #\P #\S))
+
+; adds implicit leading parenthesis
+(define (add-lead-p str)
+  (define ca (string->list str))
+  (define (helper c prev)
+    (cond
+      ((null? c) '())
+      ((and (contains? (car c) need-l-p) (not prev)) (cons #\( (cons (car c) (helper (cdr c) #f))))
+      (else (cons (car c) (helper (cdr c) (eq? (car c) #\( ))))
+    )
+  ) (list->string (helper ca #f))
+)
+
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace buf)
   (define (replace-helper k)
