@@ -9,9 +9,12 @@
 ; Author: Zachary Cotton
 ; Contact: mr.zacharycotton@gmail.com
 ;
-; Usage: scm -f gscm.scm [golf scheme program source] # runs from argument text
-;        scm -f gscm.scm FILE [golf scheme script file] # runs from file
+; Where the filename of this program is gscm-$ext
+; And $scm = "scm -f" ? $ext == scm
+; Usage: $scm gscm-$ext [golf scheme program source] # runs from argument text
+;        $scm gscm-$ext FILE [golf scheme script file] # runs from file
 ;
+; Github:
 ; Golf Scheme Language Specification:
 ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
