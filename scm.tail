@@ -11,4 +11,4 @@
 
 ; transpile and run the script
 (display (replace (buffer script)))
-(eval (replace (buffer script)))
+(eval (transpile script))

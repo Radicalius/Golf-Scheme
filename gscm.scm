@@ -121,6 +121,11 @@
   (replace-helper 0)
 )
 
+; transpiles golf scheme to normal Scheme
+(define (transpile program)
+  (car (replace (buffer (add-lead-p script)))))
+)
+
 ; computes the length of a list
 (define (len l)
   (if (null? l)
