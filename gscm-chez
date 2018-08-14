@@ -54,13 +54,16 @@
 ; Returns an iterator for a string
 (define (buffer str)
   (define k -1)
-  (lambda ()
-    (if (= k (- (string-length str) 1))
-      '()
-      (begin
-        (set! k (+ k 1))
-        (string-ref str k)
+  (lambda (op)
+    (if (= op 0)
+      (if (= k (- (string-length str) 1))
+        '()
+        (begin
+          (set! k (+ k 1))
+          (string-ref str k)
+        )
       )
+      (string-ref str (+ k 1))
     )
   )
 )
@@ -72,12 +75,12 @@
 (define (parse start buf)
   (define (parse-int start sofar buf)
     (if (contains? start numerals)
-      (parse-int (buf) (+ (* 10 sofar) (lookup start numerals numbers)) buf)
+      (parse-int (buf 0) (+ (* 10 sofar) (lookup start numerals numbers)) buf)
       sofar
     )
   )
   (define (parse-str buf)
-    (define cur (buf))
+    (define cur (buf 0))
     (if (or (null? cur) (eq? cur #\"))
       ""
       (string-append (make-string 1 cur) (parse-str buf))
@@ -85,7 +88,7 @@
   )
   (cond
     ((contains? start numerals) (parse-int start 0 buf))
-    ((eq? start #\\) (buf))
+    ((eq? start #\\) (buf 0))
     ((eq? start #\') (list (list 'quote (list (parse buf)))))
     ((eq? start #\") (parse-str buf))
     (else start)
@@ -111,7 +114,7 @@
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace buf)
   (define (replace-helper k)
-    (define cur (buf))
+    (define cur (buf 0))
     (cond
       ((or (null? cur) (eq? cur #\) )) '())
       ((eq? cur #\( ) (cons (replace-helper buf) (replace-helper buf)))
