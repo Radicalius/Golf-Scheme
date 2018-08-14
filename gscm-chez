@@ -101,10 +101,11 @@
   (define (helper c prev)
     (cond
       ((null? c) '())
-      ((and (contains? (car c) need-l-p) (not prev)) (cons #\( (cons (car c) (helper (cdr c) #f))))
-      (else (cons (car c) (helper (cdr c) (eq? (car c) #\( ))))
+      ((and (contains? (car c) need-l-p) (not (eq? prev #\) ))) (cons #\( (cons (car c) (helper (cdr c) (car c)))))
+      ((and (not (contains? (car c) numerals)) (contains? prev numerals)) (cons #\a (cons (car c) (helper (cdr c) (car c)))))
+      (else (cons (car c) (helper (cdr c) (car c))))
     )
-  ) (list->string (helper ca #f))
+  ) (list->string (helper ca #\k))
 )
 
 ; Replaces all occurrences of items in keys with their associated values
@@ -114,6 +115,7 @@
     (cond
       ((or (null? cur) (eq? cur #\) )) '())
       ((eq? cur #\( ) (cons (replace-helper buf) (replace-helper buf)))
+      ((eq? cur #\space) (replace-helper buf))
       ((contains? cur keys) (cons (lookup cur keys vals) (replace-helper buf)))
       (else (cons (parse cur buf) (replace-helper buf)))
     )
@@ -123,7 +125,7 @@
 
 ; transpiles golf scheme to normal Scheme
 (define (transpile program)
-  (car (replace (buffer (add-lead-p script)))))
+  (car (replace (buffer (add-lead-p program))))
 )
 
 ; computes the length of a list

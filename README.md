@@ -39,6 +39,8 @@ Each scheme keyword listed must be substituted with its corresponding letter in 
 ## Implicit Parenthesis
 
 In the following situations, parenthesis are optional:
-- Very First Opening and Very Last Closing parenthesis  
+- Very First Opening and Very Last Closing parentheses  
   `(D(x)5)` = `D(x)5`  
-  `(D(x)D(y)5))` = `D(x)D(y)5`  
+  `(D(x)D(y)5))` = `D(x)D(y)5`
+- Opening Parenthesis for all Golf Scheme Keywords that require them (see keyword translation table).  
+  `D(cl)(I(Nl)0 (+(c(Sl))1` = `D(cl)INl)0 +(cSl))1`
