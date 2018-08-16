@@ -20,8 +20,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\#       #\=      #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N    #\M   #\O        #\P      #\S  #\'))
-(define vals (list 'number?  'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'pair?   'cdr 'quote))
+(define keys (list #\#       #\=      #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N    #\M   #\O        #\P      #\Q           #\S  #\'))
+(define vals (list 'number?  'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'pair?  'quotient     'cdr 'quote))
 
 ; Add variable char => symbol to keys
 (define keys (append keys (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)))
@@ -63,7 +63,10 @@
           (string-ref str k)
         )
       )
-      (string-ref str (+ k 1))
+      (if (= k (- (string-length str) 1))
+        '()
+        (string-ref str k)
+      )
     )
   )
 )
@@ -88,15 +91,17 @@
   )
   (cond
     ((contains? start numerals) (parse-int start 0 buf))
+    ((contains? start keys) (lookup start keys vals))
     ((eq? start #\\) (buf 0))
     ((eq? start #\') (list (list 'quote (list (parse buf)))))
     ((eq? start #\") (parse-str buf))
+    ((eq? start #\() (replace buf))
     (else start)
   )
 )
 
 ; a list of all the golf-scheme keywords that may need leading parenthesis
-(define need-l-p (list #\# #\= #\+ #\- #\* #\&  #\| #\!  #\A #\B #\C #\D #\E #\F #\I #\J #\L #\N #\M #\O #\P #\S))
+(define need-l-p (list #\# #\= #\+ #\- #\* #\/ #\&  #\| #\!  #\A #\B #\C #\D #\E #\F #\I #\J #\L #\N #\M #\O #\P #\Q #\S))
 
 ; adds implicit leading parenthesis
 (define (add-lead-p str)
@@ -104,26 +109,32 @@
   (define (helper c prev)
     (cond
       ((null? c) '())
-      ((and (contains? (car c) need-l-p) (not (eq? prev #\) ))) (cons #\( (cons (car c) (helper (cdr c) (car c)))))
-      ((and (not (contains? (car c) numerals)) (contains? prev numerals)) (cons #\a (cons (car c) (helper (cdr c) (car c)))))
+      ((and (not (contains? (car c) numerals)) (contains? prev numerals)) (cons #\a (helper c #\a)))
+      ((and (contains? (car c) need-l-p) (not (eq? prev #\( ))) (cons #\( (cons (car c) (helper (cdr c) (car c)))))
       (else (cons (car c) (helper (cdr c) (car c))))
     )
   ) (list->string (helper ca #\k))
 )
 
+(define known-len (list #\F #\S #\C #\I #\N #\P #\# #\= #\+ #\- #\* #\/ #\& #\Q  #\| #\!))
+(define length (list     2   2    3 4   2   2   2   3   3   3   3   3   3   3    3   2  ))
+
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace buf)
-  (define (replace-helper k)
-    (define cur (buf 0))
-    (cond
-      ((or (null? cur) (eq? cur #\) )) '())
-      ((eq? cur #\( ) (cons (replace-helper buf) (replace-helper buf)))
-      ((eq? cur #\space) (replace-helper buf))
-      ((contains? cur keys) (cons (lookup cur keys vals) (replace-helper buf)))
-      (else (cons (parse cur buf) (replace-helper buf)))
+  (define (replace-helper k l)
+    (let ((cur (buf 0)))
+      (define len (if (contains? cur known-len) (lookup cur known-len length) l))
+      (cond
+        ((or (null? cur) (eq? cur #\) )) '())
+        ((= len 1) (list (parse cur buf)))
+        ((eq? cur #\( ) (cons (replace-helper buf -1) (replace-helper buf (- len 1))))
+        ((eq? cur #\space) (replace-helper buf (- len 1)))
+        ((contains? cur keys) (cons (lookup cur keys vals) (replace-helper buf (- len 1))))
+        (else (cons (parse cur buf) (replace-helper buf (- len 1))))
+      )
     )
   )
-  (replace-helper 0)
+  (replace-helper 0 -1)
 )
 
 ; transpiles golf scheme to normal Scheme

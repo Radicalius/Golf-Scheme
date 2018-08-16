@@ -43,4 +43,6 @@ In the following situations, parenthesis are optional:
   `(D(x)5)` = `D(x)5`  
   `(D(x)D(y)5))` = `D(x)D(y)5`
 - Opening Parenthesis for all Golf Scheme Keywords that require them (see keyword translation table).  
-  `D(cl)(I(Nl)0 (+(c(Sl))1` = `D(cl)INl)0 +(cSl))1`
+  `D(cl)(I(Nl)0(+(c(Sl))1` = `D(cl)INl)0+(cSl))1`
+- Closing parenthesis for keywords with a known number of arguments
+  `D(cl)INl)0+(cSl))1` => `D(cl)INl0+(cSl)1`
