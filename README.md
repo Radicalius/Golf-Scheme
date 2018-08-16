@@ -35,6 +35,8 @@ Each scheme keyword listed must be substituted with its corresponding letter in 
 | not            | !                      |
 | number?        | #                      |
 | equal?         | =                      |
+| <              | <                      |
+| >              | >                      |
 
 ## Implicit Parenthesis
 
@@ -46,3 +48,12 @@ In the following situations, parenthesis are optional:
   `D(cl)(I(Nl)0(+(c(Sl))1` = `D(cl)INl)0+(cSl))1`
 - Closing parenthesis for keywords with a known number of arguments
   `D(cl)INl)0+(cSl))1` => `D(cl)INl0+(cSl)1`
+
+## Examples
+
+- Hello World: `O"Hello World`
+- Compute the length of a list: `D(cl)INl0+(cSl)1`
+- [Divide the Work][1] Solution: `D(fxy)I=y0~CQyx(f-x1-yQyx")`
+- [Sort by Multiplying][2] Solution: ``
+
+1: https://codegolf.stackexchange.com/questions/170676/divide-the-work
