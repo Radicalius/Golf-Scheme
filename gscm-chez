@@ -24,7 +24,8 @@
 (define vals (list 'number?  'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'pair?  'quotient     'cdr 'quote))
 
 ; Add variable char => symbol to keys
-(define keys (append keys (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z)))
+(define lowercase (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z))
+(define keys (append keys lowercase))
 (define vals (append vals (list 'a  'b  'c  'd  'e  'f  'g  'h  'i  'j  'k  'l  'm  'n  'o  'p  'q  'r  's  't  'u  'v  'w  'x  'y  'z)))
 
 ; Determines if a character needs to be replaced
@@ -100,6 +101,15 @@
   )
 )
 
+; adds implicit keywords back in
+(define (implicit program)
+  (if (contains? (string-ref program 0) lowercase)
+    (set! program (string-append "D(f" program))
+    0
+  )
+  program
+)
+
 ; a list of all the golf-scheme keywords that may need leading parenthesis
 (define need-l-p (list #\# #\= #\+ #\- #\* #\/ #\&  #\| #\!  #\A #\B #\C #\D #\E #\F #\I #\J #\L #\N #\M #\O #\P #\Q #\S))
 
@@ -139,7 +149,7 @@
 
 ; transpiles golf scheme to normal Scheme
 (define (transpile program)
-  (car (replace (buffer (add-lead-p program))))
+  (car (replace (buffer (add-lead-p (implicit program)))))
 )
 
 ; computes the length of a list
