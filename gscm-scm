@@ -20,13 +20,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\#       #\=      #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N    #\M   #\O        #\P      #\Q           #\S  #\'))
-(define vals (list 'number?  'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'pair?  'quotient     'cdr 'quote))
+(define keys (list #\> #\<  #\#       #\%         #\=      #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N    #\M   #\O        #\P       #\Q           #\S  #\'))
+(define vals (list '>  '<  'number?  'modulo     'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'prime?  'quotient     'cdr 'quote))
 
 ; Add variable char => symbol to keys
 (define lowercase (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z))
 (define keys (append keys lowercase))
 (define vals (append vals (list 'a  'b  'c  'd  'e  'f  'g  'h  'i  'j  'k  'l  'm  'n  'o  'p  'q  'r  's  't  'u  'v  'w  'x  'y  'z)))
+
+; implementation of primality tester (because scheme has no builtin :( )
+(define (prime? n)
+  (define (p x f)
+    (if (= x f)
+      #t
+      (if (= (modulo x f) 0)
+        #f
+        (p x (+ f 1))
+      )
+    )
+  )(p n 2)
+)
 
 ; Determines if a character needs to be replaced
 (define (contains? key keys)
@@ -111,7 +124,8 @@
 )
 
 ; a list of all the golf-scheme keywords that may need leading parenthesis
-(define need-l-p (list #\# #\= #\+ #\- #\* #\/ #\&  #\| #\!  #\A #\B #\C #\D #\E #\F #\I #\J #\L #\N #\M #\O #\P #\Q #\S))
+(define need-l-p (list #\# #\= #\+ #\- #\* #\/ #\&  #\| #\! #\> #\< #\%  #\A #\B #\C #\D #\E #\F #\I #\J #\L #\N #\M #\O #\P #\Q #\S))
+(define need-b-p (list #\D #\L #\J))
 
 ; adds implicit leading parenthesis
 (define (add-lead-p str)
@@ -120,14 +134,15 @@
     (cond
       ((null? c) '())
       ((and (not (contains? (car c) numerals)) (contains? prev numerals)) (cons #\a (helper c #\a)))
+      ((and (not (eq? (car c) #\( )) (contains? prev need-b-p)) (cons #\( (helper c #\()))
       ((and (contains? (car c) need-l-p) (not (eq? prev #\( ))) (cons #\( (cons (car c) (helper (cdr c) (car c)))))
       (else (cons (car c) (helper (cdr c) (car c))))
     )
   ) (list->string (helper ca #\k))
 )
 
-(define known-len (list #\F #\S #\C #\I #\N #\P #\# #\= #\+ #\- #\* #\/ #\& #\Q  #\| #\!))
-(define length (list     2   2    3 4   2   2   2   3   3   3   3   3   3   3    3   2  ))
+(define known-len (list #\F #\S #\C #\I #\N #\P #\# #\= #\+ #\- #\* #\/ #\& #\Q  #\| #\! #\> #\<  #\%))
+(define length (list     2   2    3 4   2   2   2   3   3   3   3   3   3   3    3   2   3   3    3  ))
 
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace buf)

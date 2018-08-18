@@ -27,7 +27,7 @@ Each scheme keyword listed must be substituted with its corresponding letter in 
 | null?          | N                      |
 | list           | M                      |
 | display        | O                      |
-| pair?          | P                      |
+| prime?         | P                      |
 | second or cdr  | S                      |
 | nil or '()     | ~                      |
 | and            | &                      |
@@ -37,6 +37,7 @@ Each scheme keyword listed must be substituted with its corresponding letter in 
 | equal?         | =                      |
 | <              | <                      |
 | >              | >                      |
+| modulo         | %                      |
 
 ## Implicit Parenthesis
 
@@ -47,13 +48,19 @@ In the following situations, parenthesis are optional:
 - Opening Parenthesis for all Golf Scheme Keywords that require them (see keyword translation table).  
   `D(cl)(I(Nl)0(+(c(Sl))1` = `D(cl)INl)0+(cSl))1`
 - Closing parenthesis for keywords with a known number of arguments
-  `D(cl)INl)0+(cSl))1` => `D(cl)INl0+(cSl)1`
+  `D(cl)INl)0+(cSl))1` = `D(cl)INl0+(cSl)1`
+
+## Other Implicits
+
+- If the first character of a golf scheme program is lowercase, the transpiler will prepend D(f
+  `D(cl)(I(Nl)0(+(c(Sl))1` = `l)(I(Nl)0(+(f(Sl))1`
 
 ## Examples
 
 - Hello World: `O"Hello World`
-- Compute the length of a list: `D(cl)INl0+(cSl)1`
-- [Divide the Work][1] Solution: `D(fxy)I=y0~CQyx(f-x1-yQyx")`
-- [Sort by Multiplying][2] Solution: ``
+- Compute the length of a list: `l)INl0+(fSl)1`
+- [Divide the Work][1] Solution: `xy)I=y0~CQyx(f-x1-yQyx")`
+- [Sequence Question][2] Solution: `n)D(gcdmn)I=n0~I&Pd>cmCc(g1+1dc-n1)(g+1c+1dmn))(g2 2 0n`
 
 1: https://codegolf.stackexchange.com/questions/170676/divide-the-work
+2: https://codegolf.stackexchange.com/questions/170787/compute-the-minimum-anan-1-such-that-a1a2-dotsan-is-prime
