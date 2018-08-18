@@ -62,5 +62,5 @@ In the following situations, parenthesis are optional:
 - [Divide the Work][1] Solution: `xy)I=y0~CQyx(f-x1-yQyx")`
 - [Sequence Question][2] Solution: `n)D(gcdmn)I=n0~I&Pd>cmCc(g1+1dc-n1)(g+1c+1dmn))(g2 2 0n`
 
-1: https://codegolf.stackexchange.com/questions/170676/divide-the-work
-2: https://codegolf.stackexchange.com/questions/170787/compute-the-minimum-anan-1-such-that-a1a2-dotsan-is-prime
+[1]: https://codegolf.stackexchange.com/questions/170676/divide-the-work
+[2]: https://codegolf.stackexchange.com/questions/170787/compute-the-minimum-anan-1-such-that-a1a2-dotsan-is-prime
