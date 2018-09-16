@@ -14,14 +14,14 @@
 ; Usage: $scm gscm-$ext [golf scheme program source] # runs from argument text
 ;        $scm gscm-$ext FILE [golf scheme script file] # runs from file
 ;
-; Github:
+; Github: https://github.com/Radicalius/Golf-Scheme
 ; Golf Scheme Language Specification:
-;
+; https://github.com/Radicalius/Golf-Scheme/blob/master/README.md
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; A mapping of terms to replace with terms they should be replaced with
-(define keys (list #\> #\<  #\#       #\%         #\=      #\~ #\+ #\- #\* #\/ #\&  #\| #\!  #\A      #\B     #\C   #\D    #\E      #\F   #\I #\J    #\L     #\N    #\M   #\O        #\P       #\Q           #\S  #\'))
-(define vals (list '>  '<  'number?  'modulo     'equal?  ''() '+  '-  '*  '/  'and 'or 'not 'append 'begin 'cons 'define 'else    'car  'if 'cond   'lambda 'null? 'list  'display  'prime?  'quotient     'cdr 'quote))
+(define keys (list {{gen/golf_scheme_keywords}} ))
+(define vals (list {{gen/scheme_keywords}} ))
 
 ; Add variable char => symbol to keys
 (define lowercase (list #\a #\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r #\s #\t #\u #\v #\w #\x #\y #\z))
@@ -141,8 +141,8 @@
   ) (list->string (helper ca #\k))
 )
 
-(define known-len (list #\F #\S #\C #\I #\N #\P #\# #\= #\+ #\- #\* #\/ #\& #\Q  #\| #\! #\> #\<  #\%))
-(define length (list     2   2    3 4   2   2   2   3   3   3   3   3   3   3    3   2   3   3    3  ))
+(define known-len (list {{gen/golf_scheme_keywords}} ))
+(define length (list    {{gen/keyword_args}} ))
 
 ; Replaces all occurrences of items in keys with their associated values
 (define (replace buf)
